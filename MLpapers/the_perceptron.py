@@ -37,6 +37,10 @@ class Perceptron():
             z = np.dot(self.weights, X_train) + self.bias 
             
             # process z to the activation function [basically make predictions based on the perception]
-            z_predictions = self.activation_fn(z=z)
+            y_hat = self.activation_fn(z=z)
             
             # update the weights and baises
+            self.weights = self.weights + self.learning_rate * np.dot(X_train.T, (y_train - y_hat))
+            self.bias = self.bias + self.learning_rate * np.sum(y_train - y_hat)
+            
+        return self.weights, self.bias
