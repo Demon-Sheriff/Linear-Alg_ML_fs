@@ -40,7 +40,8 @@ class Perceptron():
             y_hat = self.activation_fn(z=z)
             
             # update the weights and baises
-            self.weights = self.weights + self.learning_rate * np.dot(X_train.T, (y_train - y_hat))
-            self.bias = self.bias + self.learning_rate * np.sum(y_train - y_hat)
+            if y_hat != y:
+                self.weights = self.weights + self.learning_rate * np.dot(X_train.T, (y_train - y_hat))
+                self.bias = self.bias + self.learning_rate * np.sum(y_train - y_hat)
             
         return self.weights, self.bias
