@@ -14,7 +14,7 @@ import pandas as pd
 
 class Perceptron():
     
-    def __init__(self):
-        self.bias = 0
-        self.wieghts = 
-        pass
+    def __init__(self, learning_rate=0.001, n_iterations=1000):
+        self.learning_rate = learning_rate
+        self.n_iterations = n_iterations 
+        
