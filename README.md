@@ -10,4 +10,5 @@
 ---
 
 #### Generalised Linear Model (High Level View)
-![Screenshot from 2024-11-27 16-41-08](https://github.com/user-attachments/assets/6430bfd8-8134-4ae7-b004-39a250fb33dc)
+![Screenshot from 2024-11-27 16-49-37](https://github.com/user-attachments/assets/8d9968dd-791b-4d11-b3c6-ae4dcbc3771d)
+
