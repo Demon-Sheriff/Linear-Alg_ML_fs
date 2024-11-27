@@ -9,5 +9,5 @@
 
 ---
 
-#### HLD of a Generalised Linear Model
-![Screenshot from 2024-11-27 16-25-12](https://github.com/user-attachments/assets/fef6ba00-2811-45d7-8cf6-f6d9f0cda920)
+#### Generalised Linear Model (High Level View)
+![Screenshot from 2024-11-27 16-41-08](https://github.com/user-attachments/assets/6430bfd8-8134-4ae7-b004-39a250fb33dc)
