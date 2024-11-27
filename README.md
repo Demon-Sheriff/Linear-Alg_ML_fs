@@ -6,3 +6,7 @@
 - Or where the decision boundary is non-linear
 
 [**Official Perceptron Paper Link**](https://www.ling.upenn.edu/courses/cogs501/Rosenblatt1958.pdf)
+
+---
+
+#### HLD of a Generalised Linear Model
