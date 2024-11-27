@@ -10,3 +10,4 @@
 ---
 
 #### HLD of a Generalised Linear Model
+![Screenshot from 2024-11-27 16-25-12](https://github.com/user-attachments/assets/fef6ba00-2811-45d7-8cf6-f6d9f0cda920)
