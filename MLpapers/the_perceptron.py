@@ -45,3 +45,7 @@ class Perceptron():
                 self.bias = self.bias + self.learning_rate * np.sum(y_train - y_hat)
             
         return self.weights, self.bias
+    
+    def predict():
+        # To implement
+        pass
