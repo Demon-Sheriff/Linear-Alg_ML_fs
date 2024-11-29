@@ -12,3 +12,7 @@
 #### Generalised Linear Model (High Level View)
 ![Screenshot from 2024-11-27 16-49-37](https://github.com/user-attachments/assets/8d9968dd-791b-4d11-b3c6-ae4dcbc3771d)
 
+---
+#### True-Positives, False-Positives, True-Negatives, False-Negatives
+![image](https://github.com/user-attachments/assets/040680ca-6104-4e28-ac57-b085d61bc5ea)
+
