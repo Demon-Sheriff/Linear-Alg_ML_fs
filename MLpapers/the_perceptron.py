@@ -1,11 +1,11 @@
 # Implementing the perceptron paper 
 
 """
-Source of the paper : 
-https://www.ling.upenn.edu/courses/cogs501/Rosenblatt1958.pdf
+    Source of the paper : 
+    https://www.ling.upenn.edu/courses/cogs501/Rosenblatt1958.pdf
 
-Dated year 1958, University of Pensylvannia 
-Written by F Rosenblatt
+    Dated year 1958, University of Pensylvannia 
+    Written by F Rosenblatt
 
 """
 
@@ -38,6 +38,8 @@ class Perceptron():
         self.weights = np.random.rand(n_features) * 0.01
         self.bias = 0 # start off with zero as the bias
         
+        # TODO : add convergence check in the update rule.
+        
         """ 
             IMPORTANT NOTE: 
 
@@ -47,7 +49,7 @@ class Perceptron():
         
         for _ in range(self.n_iterations):
             
-            for idx, x_i in enumerate(range(X_train)):
+            for idx, x_i in enumerate(X_train):
                 
                 # apply the weighted sum or the dot product of theta.T X [Calculating the perception]
                 z = np.dot(x_i, self.weights) + self.bias 
@@ -68,4 +70,10 @@ class Perceptron():
         z_test = np.dot(X_test, self.weights) + self.bias
         y_pred = self.activation_fn(z_test)
         
-        return y_pred
+        return np.array(y_pred)
+    
+    def evaluate():
+        # TODO : add evaluation metrics
+        pass
+    
+    
