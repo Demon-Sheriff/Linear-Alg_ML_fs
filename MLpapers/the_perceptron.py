@@ -9,8 +9,14 @@ Written by F Rosenblatt
 
 """
 
+""" 
+    NOTE: 
+        Draw-backs of the perceptron : 
+        1. Does not work on datasets where the data is not linearly seperable
+        2. Assumes that the decision boundary will always be linear on the training data and while making predictions.
+"""
+
 import numpy as np
-import pandas as pd
 
 class Perceptron():
     
@@ -51,13 +57,14 @@ class Perceptron():
                 
                 # update the weights and baises
                 if y_hat != y_train[idx]:
-                    self.weights = self.weights + self.learning_rate * np.dot(X_train.T, (y_train[idx] - y_hat))
+                    self.weights = self.weights + self.learning_rate * np.dot(x_i, (y_train[idx] - y_hat))
                     self.bias = self.bias + self.learning_rate * np.sum(y_train[idx] - y_hat)
             
         return self.weights, self.bias
     
     def predict(self, X_test):
         
+        X_test = np.array(X_test) # make sure X_test is a numpy array
         z_test = np.dot(X_test, self.weights) + self.bias
         y_pred = self.activation_fn(z_test)
         
