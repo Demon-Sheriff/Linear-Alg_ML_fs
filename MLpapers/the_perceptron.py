@@ -51,14 +51,14 @@ class Perceptron():
                 
                 # update the weights and baises
                 if y_hat != y_train[idx]:
-                    self.weights = self.weights + self.learning_rate * np.dot(X_train.T, (y_train - y_hat))
-                    self.bias = self.bias + self.learning_rate * np.sum(y_train - y_hat)
+                    self.weights = self.weights + self.learning_rate * np.dot(X_train.T, (y_train[idx] - y_hat))
+                    self.bias = self.bias + self.learning_rate * np.sum(y_train[idx] - y_hat)
             
         return self.weights, self.bias
     
     def predict(self, X_test):
-        # To implement
-        z_test = self.weights * X_test + self.bias
-        y_pred_prob = self.activation_fn(z_test)
         
-        return [1 if y > self.threshold else 0 for y in y_pred_prob]
+        z_test = np.dot(X_test, self.weights) + self.bias
+        y_pred = self.activation_fn(z_test)
+        
+        return y_pred
