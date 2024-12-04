@@ -46,6 +46,9 @@ class Perceptron():
             
         return self.weights, self.bias
     
-    def predict():
+    def predict(self, X_test):
         # To implement
-        pass
+        z_test = self.weights * X_test + self.bias
+        y_pred_prob = self.activation_fn(z_test)
+        
+        return [1 if y > self.threshold else 0 for y in y_pred_prob]
