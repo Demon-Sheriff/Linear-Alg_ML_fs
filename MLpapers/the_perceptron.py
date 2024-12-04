@@ -32,17 +32,27 @@ class Perceptron():
         self.weights = np.random.rand(n_features) * 0.01
         self.bias = 0 # start off with zero as the bias
         
+        """ 
+            IMPORTANT NOTE: 
+
+            The perceptron typically updates weights one sample at a time (stochastic gradient descent). 
+            We need to loop over each sample individually within the iteration loop.
+        """
+        
         for _ in range(self.n_iterations):
-            # apply the weighted sum or the dot product of theta.T X [Calculating the perception]
-            z = np.dot(self.weights, X_train) + self.bias 
             
-            # process z to the activation function [basically make predictions based on the perception]
-            y_hat = self.activation_fn(z)
-            
-            # update the weights and baises
-            if y_hat != y_train:
-                self.weights = self.weights + self.learning_rate * np.dot(X_train.T, (y_train - y_hat))
-                self.bias = self.bias + self.learning_rate * np.sum(y_train - y_hat)
+            for idx, x_i in enumerate(range(X_train)):
+                
+                # apply the weighted sum or the dot product of theta.T X [Calculating the perception]
+                z = np.dot(x_i, self.weights) + self.bias 
+                
+                # process z to the activation function [basically make predictions based on the perception]
+                y_hat = self.activation_fn(z)
+                
+                # update the weights and baises
+                if y_hat != y_train[idx]:
+                    self.weights = self.weights + self.learning_rate * np.dot(X_train.T, (y_train - y_hat))
+                    self.bias = self.bias + self.learning_rate * np.sum(y_train - y_hat)
             
         return self.weights, self.bias
     
