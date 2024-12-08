@@ -1,6 +1,10 @@
 import numpy as np
 
-""" we can maintain each unique word in a trie and also store the frequency of each word class_wise [LATER]"""
+""" we can maintain each unique word in a trie and also store the frequency of each word class_wise [LATER]
+    TODO:
+        1. make all the array operations vectorized
+        2. implement trie for word processing
+"""
 
 class NaiveBayesSpamClassifier():
     
@@ -36,7 +40,33 @@ class NaiveBayesSpamClassifier():
         self.feature_likelihoods = np.zeros((d, self.n_classes))
         
         for class_ in range(self.n_classes):
+            # find all rows corresponding to the current class
             class_indices = np.where(y_train == class_)[0]
 
-            self.feature_likelihoods[:, label] = np.sum(X_train[class_indices], axis=0)
-            self.feature_likelihoods[:, label] = self.feature_likelihoods[:, label] / class_count[label]
+            # sum up word frequencies for the current class
+            self.feature_likelihoods[:, class_] = np.sum(X_train[class_indices], axis=0)
+
+            # normalize by the total samples in the class
+            self.feature_likelihoods[:, class_] /= class_count[class_]
+            
+        return self
+    
+    def predict(self, X_test):
+        X_test = np.array(X_test)
+        n_samples, d = X_test.shape
+        y_pred = []
+        
+        for i in range(n_samples):
+            
+            log_probs = []
+            for label in range(self.n_classes):
+                log_prior = np.log(self.class_priors[label])
+                log_likelihood = np.sum(
+                    X_test[i] * np.log(self.feature_likelihoods[:, label]) +
+                    (1 - X_test[i]) * np.log(1 - self.feature_likelihoods[:, label])
+                )
+                log_probs.append(log_prior + log_likelihood)
+            
+            y_pred.append(np.argmax(log_probs))
+        
+        return y_pred
