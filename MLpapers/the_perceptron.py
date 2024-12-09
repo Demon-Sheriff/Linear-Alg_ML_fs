@@ -43,7 +43,7 @@ class Perceptron():
         """ 
             IMPORTANT NOTE: 
 
-            The perceptron typically updates weights one sample at a time (stochastic gradient descent). 
+            The perceptron typically updates weights one sample at a time (stochastic gradient descent like). 
             We need to loop over each sample individually within the iteration loop.
         """
         
@@ -72,7 +72,7 @@ class Perceptron():
         
         return np.array(y_pred)
     
-    def evaluate():
+    def evaluate(self):
         # TODO : add evaluation metrics
         pass
     
