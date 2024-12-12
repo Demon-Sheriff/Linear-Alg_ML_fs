@@ -6,6 +6,31 @@ import numpy as np
         2. implement trie for word processing
 """
 
+class TrieNode:
+    def __init__(self):
+        self.children = {}
+        self.class_counts = [0, 0]  # For binary classification: Spam (1) and Ham (0)
+
+class Trie:
+    def __init__(self):
+        self.root = TrieNode()
+
+    def insert(self, word, label):
+        node = self.root
+        for char in word:
+            if char not in node.children:
+                node.children[char] = TrieNode()
+            node = node.children[char]
+        node.class_counts[label] += 1
+
+    def get_class_counts(self, word):
+        node = self.root
+        for char in word:
+            if char not in node.children:
+                return [0, 0]  # Word not found
+            node = node.children[char]
+        return node.class_counts
+
 class NaiveBayesSpamClassifier():
     
     def __init__(self):
