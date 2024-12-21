@@ -16,3 +16,8 @@
 #### True-Positives, False-Positives, True-Negatives, False-Negatives
 ![image](https://github.com/user-attachments/assets/040680ca-6104-4e28-ac57-b085d61bc5ea)
 
+---
+#### Similarity perspective of Kernels
+![Screenshot from 2024-12-21 18-40-00](https://github.com/user-attachments/assets/f3297e64-2446-4883-8377-4d219cabd7d9)
+
+
