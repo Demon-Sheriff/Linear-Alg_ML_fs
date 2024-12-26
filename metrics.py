@@ -14,7 +14,7 @@ def r2_score(y_test, y_pred):
 
 def linear_reg(X_train, y_train, n_iterations = 1000, learning_rate = 0.01):
     
-    n, m = X_train.shape # n_samples, 
+    n, m = X_train.shape # n_samples, m_features
     w = np.zeros(m)
     b = 0
     
