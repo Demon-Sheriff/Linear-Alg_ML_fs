@@ -2,9 +2,9 @@ import numpy as np
 
 class Network:
 
-    def __init__(self, input_size, num_hidden_layers, output_size, activation_fn ='sigmoid', n_iters=1000, lr=0.01):
+    def __init__(self, input_size, hidden_size, output_size, activation_fn ='sigmoid', n_iters=1000, lr=0.01):
 
-        self.num_hidden_layers = num_hidden_layers
+        self.hidden_size = hidden_size
         self.n_iters = n_iters
         self.input_size = input_size
         self.output_size = output_size
@@ -14,6 +14,7 @@ class Network:
         self.biases = None
 
     def activation_function(self, z):
+        
         """
         Applies the specified activation function to the input z.
 
@@ -54,6 +55,7 @@ class Network:
             raise ValueError("Unsupported activation function.")
 
     def xavier_init(self, shape):
+        
         """
         Xavier/Glorot weight initialization for Sigmoid.
         
@@ -74,10 +76,10 @@ class Network:
         n_features, n_samples = X_train.shape # n_features, m_examples = num_samples
 
         # initialise w[l]s and b[l]s
-        w1 = self.xavier_init((4, n_features))
-        b1 = np.zeros((4, 1))
-        w2 = self.xavier_init((1, 4))
-        b2 = np.zeros((1, 1))
+        w1 = self.xavier_init((self.hidden_size, n_features))
+        b1 = np.zeros((self.hidden_size, 1))
+        w2 = self.xavier_init((self.output_size, self.hidden_size))
+        b2 = np.zeros((self.output_size, 1))
 
         # apply gradient descent 
         for _ in range(self.n_iters):
@@ -118,7 +120,7 @@ class Network:
         }
     
     def predict(self, X_test):
-        
+
         # extract the biases
         b1 = self.biases['b1']
         b2 = self.biases['b2']
