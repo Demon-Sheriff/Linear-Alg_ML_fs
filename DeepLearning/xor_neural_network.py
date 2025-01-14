@@ -2,119 +2,137 @@ import numpy as np
 
 class Network:
 
-  def __init__(self, input_size, num_hidden_layers, output_size, activation_fn ='sigmoid', n_iters=1000, lr=0.01):
+    def __init__(self, input_size, num_hidden_layers, output_size, activation_fn ='sigmoid', n_iters=1000, lr=0.01):
 
-    self.num_hidden_layers = num_hidden_layers
-    self.n_iters = n_iters
-    self.input_size = input_size
-    self.output_size = output_size
-    self.weights = None
-    self.biases = None
-    self.activation_type = activation_fn
-    self.learning_rate = lr
+        self.num_hidden_layers = num_hidden_layers
+        self.n_iters = n_iters
+        self.input_size = input_size
+        self.output_size = output_size
+        self.activation_type = activation_fn
+        self.learning_rate = lr
+        self.weights = None
+        self.biases = None
 
-  def activation_function(self, z):
-      """
-      Applies the specified activation function to the input z.
+    def activation_function(self, z):
+        """
+        Applies the specified activation function to the input z.
 
-      Args:
-      - activation_type (str): The type of activation function ('sigmoid', 'relu', 'tanh', 'softmax').
-      - z (numpy.ndarray): The input value to be activated.
+        Args:
+        - activation_type (str): The type of activation function ('sigmoid', 'relu', 'tanh', 'softmax').
+        - z (numpy.ndarray): The input value to be activated.
 
-      Returns:
-      - Activated output (numpy.ndarray): The activated value after applying the selected activation function.
-      """
-      
-      if self.activation_type == 'sigmoid':
-          return 1 / (1 + np.exp(-z))  # sigmoid activation
-          
-      elif self.activation_type == 'relu':
-          return np.maximum(0, z)  # ReLU activation
-          
-      elif self.activation_type == 'tanh':
-          return np.tanh(z)  # tanh activation
-          
-      elif self.activation_type == 'softmax':
-          # softmax activation
-          exp_z = np.exp(z - np.max(z))  # To prevent overflow
-          return exp_z / np.sum(exp_z, axis=0, keepdims=True)
-      
-      else:
-          raise ValueError("unsupported activation function type: {}".format(self.activation_type))
+        Returns:
+        - Activated output (numpy.ndarray): The activated value after applying the selected activation function.
+        """
+        
+        if self.activation_type == 'sigmoid':
+            return 1 / (1 + np.exp(-z))  # sigmoid activation
+            
+        elif self.activation_type == 'relu':
+            return np.maximum(0, z)  # ReLU activation
+            
+        elif self.activation_type == 'tanh':
+            return np.tanh(z)  # tanh activation
+            
+        elif self.activation_type == 'softmax':
+            # softmax activation
+            exp_z = np.exp(z - np.max(z))  # To prevent overflow
+            return exp_z / np.sum(exp_z, axis=0, keepdims=True)
+        
+        else:
+            raise ValueError("unsupported activation function type: {}".format(self.activation_type))
 
-  def xavier_init(self, shape):
-      """
-      Xavier/Glorot weight initialization for Sigmoid.
-      
-      Args:
-      - shape (tuple): The shape of the weight matrix (e.g., (n_in, n_out)).
-      
-      Returns:
-      - weights (numpy.ndarray): Initialized weight matrix.
-      """
-      # xavier/glorot initialization formula: uniform distribution
-      n_in, n_out = shape
-      limit = np.sqrt(6 / (n_in + n_out))  # calculate the limit for uniform distribution
-      wts = np.random.uniform(-limit, limit, size=shape)  # uniform distribution within [-limit, limit]
-      return wts
+    def activation_derivative(self, a):
 
-  def train(self, X_train, y_train):
+        if self.activation_type == 'sigmoid':
+            return a * (1 - a)
+        elif self.activation_type == 'tanh':
+            return 1 - a ** 2
+        elif self.activation_type == 'relu':
+            return (a > 0).astype(float)
+        else:
+            raise ValueError("Unsupported activation function.")
 
-    n, m = X_train.shape # n_features, m_examples
-    print(n, m)
+    def xavier_init(self, shape):
+        """
+        Xavier/Glorot weight initialization for Sigmoid.
+        
+        Args:
+        - shape (tuple): The shape of the weight matrix (e.g., (n_in, n_out)).
+        
+        Returns:
+        - weights (numpy.ndarray): Initialized weight matrix.
+        """
+        # xavier/glorot initialization formula: uniform distribution
+        n_in, n_out = shape
+        limit = np.sqrt(6 / (n_in + n_out))  # calculate the limit for uniform distribution
+        wts = np.random.uniform(-limit, limit, size=shape)  # uniform distribution within [-limit, limit]
+        return wts
 
-    # initialise w[l]s and b[l]s
-    w1 = self.xavier_init((4, n))
-    b1 = np.zeros((4, m))
-    w2 = self.xavier_init((1, 4))
-    b2 = np.zeros((1, m))
+    def train(self, X_train, y_train):
 
-    # apply gradient descent 
-    for iter in range(self.n_iters):
+        n_features, n_samples = X_train.shape # n_features, m_examples = num_samples
 
-      # forward pass
-      z1 = np.dot(w1, X_train) + b1
-      a1 = self.activation_function(z1)
-      z2 = np.dot(w2, a1) + b2
-      a2 = self.activation_function(z2)
+        # initialise w[l]s and b[l]s
+        w1 = self.xavier_init((4, n_features))
+        b1 = np.zeros((4, 1))
+        w2 = self.xavier_init((1, 4))
+        b2 = np.zeros((1, 1))
 
-      # backward pass
-      del_b2 = np.dot((a2 - y_train), np.ones((m, m)).T)
-      del_b1 = np.dot(w2.T, (a2 - y_train)) * (a1 * (1 - a1))
-      del_w2 = np.dot((a2 - y_train), a1.T)
-      del_w1 = np.dot(np.dot(w2.T, (a2 - y_train)) * (a1 * (1 - a1)), X_train.T)
+        # apply gradient descent 
+        for _ in range(self.n_iters):
 
-      # update the weigts and biases
-      w1 -= self.learning_rate*del_w1
-      w2 -= self.learning_rate*del_w2
-      b1 -= self.learning_rate*del_b1
-      b2 -= self.learning_rate*del_b2
+            # forward pass
+            z1 = np.dot(w1, X_train) + b1
+            a1 = self.activation_function(z1)
+            z2 = np.dot(w2, a1) + b2
+            a2 = self.activation_function(z2)
 
-    self.weights = {
-        'w1': w1,
-        'w2': w2,
-    }
-    self.biases = {
-        'b1': b1,
-        'b2': b2,
-    }
-  
-  def predict(self):
+            # backward pass
+            dz2 = a2 - y_train
+            del_w2 = np.dot(dz2, a1.T) / n_samples
+            del_b2 = np.sum(dz2, axis=1, keepdims=True) / n_samples
 
-    # extract the biases
-    b1 = self.biases['b1']
-    b2 = self.biases['b2']
+            dz1 = np.dot(w2.T, dz2) * self.activation_derivative(a1)
+            del_w1 = np.dot(dz1, X_train.T) / n_samples
+            del_b1 = np.sum(dz1, axis=1, keepdims=True) / n_samples
 
-    # extract the weights
-    w1 = self.weights['w1']
-    w2 = self.weights['w2']
+            # del_b2 = np.dot((a2 - y_train), np.ones((n_samples, n_samples)).T) / n_samples
+            # del_b1 = np.dot(w2.T, (a2 - y_train)) * (a1 * (1 - a1)) / n_samples
+            # del_w2 = np.dot((a2 - y_train), a1.T) / n_samples
+            # del_w1 = np.dot(np.dot(w2.T, (a2 - y_train)) * (a1 * (1 - a1)), X_train.T) / n_samples
 
-    # final forward pass
-    z1 = np.dot(w1, X) + b1
-    a1 = self.activation_function(z1)
-    z2 = np.dot(w2, a1) + b2
-    a2 = self.activation_function(z2)
+            # update the weigts and biases
+            w1 -= self.learning_rate*del_w1
+            w2 -= self.learning_rate*del_w2
+            b1 -= self.learning_rate*del_b1
+            b2 -= self.learning_rate*del_b2
 
-    y_hat = self.activation_function(a2)
+        self.weights = {
+            'w1': w1,
+            'w2': w2,
+        }
+        self.biases = {
+            'b1': b1,
+            'b2': b2,
+        }
+    
+    def predict(self, X_test):
+        
+        # extract the biases
+        b1 = self.biases['b1']
+        b2 = self.biases['b2']
 
-    return y_hat
+        # extract the weights
+        w1 = self.weights['w1']
+        w2 = self.weights['w2']
+
+        # final forward pass
+        z1 = np.dot(w1, X_test) + b1
+        a1 = self.activation_function(z1)
+        z2 = np.dot(w2, a1) + b2
+        a2 = self.activation_function(z2)
+
+        y_hat = a2
+
+        return (y_hat > 0.5).astype(int)
