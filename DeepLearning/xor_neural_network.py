@@ -80,21 +80,15 @@ class Network:
 
       # backward pass
       del_b2 = np.dot((a2 - y_train), np.ones((m, m)).T)
-      del_b1 = np.dot(w2.T, (a2 - y_train)) * (np.dot(a1, (1 - a1)))
+      del_b1 = np.dot(w2.T, (a2 - y_train)) * (a1 * (1 - a1))
       del_w2 = np.dot((a2 - y_train), a1.T)
-      # print(np.dot(w2.T, (a2 - y_train)))
-      del_w1 = np.dot(np.dot(w2.T, (a2 - y_train)) * (np.dot(a1, (1 - a1))), X_train.T)
+      del_w1 = np.dot(np.dot(w2.T, (a2 - y_train)) * (a1 * (1 - a1)), X_train.T)
 
       # update the weigts and biases
       w1 -= self.learning_rate*del_w1
       w2 -= self.learning_rate*del_w2
       b1 -= self.learning_rate*del_b1
       b2 -= self.learning_rate*del_b2
-    
-    print(f"w1 shape : {w1.shape}")
-    print(f"w2 shape : {w2.shape}")
-    print(f"b1 shape : {b1.shape}")
-    print(f"b2 shape : {b2.shape}")
 
     self.weights = {
         'w1': w1,
@@ -104,3 +98,23 @@ class Network:
         'b1': b1,
         'b2': b2,
     }
+  
+  def predict(self):
+
+    # extract the biases
+    b1 = self.biases['b1']
+    b2 = self.biases['b2']
+
+    # extract the weights
+    w1 = self.weights['w1']
+    w2 = self.weights['w2']
+
+    # final forward pass
+    z1 = np.dot(w1, X) + b1
+    a1 = self.activation_function(z1)
+    z2 = np.dot(w2, a1) + b2
+    a2 = self.activation_function(z2)
+
+    y_hat = self.activation_function(a2)
+
+    return y_hat
