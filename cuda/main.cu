@@ -7,12 +7,10 @@ int main() {
 
     printf("1. Initial ptr value: %p\n", (void *)ptr);
 
-    // Check for NULL before using
     if (ptr == NULL) {
         printf("2. ptr is NULL, cannot dereference\n");
     }
 
-    // Allocate memory using cudaMalloc
     if (cudaMalloc((void **)&ptr, sizeof(int)) != cudaSuccess) {
         printf("3. CUDA memory allocation failed\n");
         return 1;
@@ -20,7 +18,6 @@ int main() {
 
     printf("4. After allocation, ptr value: %p\n", (void *)ptr);
 
-    // Safe to use ptr after NULL check
     int hostValue = 42;
     if (cudaMemcpy(ptr, &hostValue, sizeof(int), cudaMemcpyHostToDevice) != cudaSuccess) {
         printf("5. Memory copy to device failed\n");
